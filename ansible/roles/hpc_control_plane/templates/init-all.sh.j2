@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+cd $(dirname $0)/..
+mkdir -p logs
+
+bin/couchdb.sh > logs/couchdb.log 2> logs/couchdb.err &
+
+while ! curl -o /dev/null --silent http://localhost:5984 ; do
+        echo "Waiting for couchdb"
+        sleep 1
+done
+
+bin/zookeeper.sh > logs/zookeeper.log 2> logs/zookeeper.err &
+while ! ( echo ruok > /dev/tcp/127.0.0.1/2181 ) ; do
+        echo Waiting for zookeeper
+        sleep 1
+done
+
+bin/kafka.sh > logs/kafka.log 2> logs/kafka.err &
+while ! ( echo > /dev/tcp/127.0.0.1/{{ kafka.advertisedPort }} ) ; do
+        echo Waiting for kafka
+        sleep 1
+done
+
+exec bin/start-controller.sh

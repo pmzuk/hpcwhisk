@@ -1,0 +1,5 @@
+Bootstrap: docker
+From: {{ couchdb_image }}
+
+%post
+  chmod -R a+rwX /opt/

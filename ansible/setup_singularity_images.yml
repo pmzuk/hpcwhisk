@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  vars:
+    files_dir: "{{playbook_dir}}/roles/hpc_control_plane"
+    couchdb_image: "{{ couchdb.docker_image | default('apache/couchdb:' ~ couchdb.version ) }}"
+  tasks:
+  - name: gen kafka.def file
+    local_action: template src="{{files_dir}}/templates/kafka.def.j2" dest="{{files_dir}}/files/kafka.def"
+  - name: gen zookeeper.def file
+    local_action: template src="{{files_dir}}/templates/zookeeper.def.j2" dest="{{files_dir}}/files/zookeeper.def"
+  - name: gen couchdb.def file
+    local_action: template src="{{files_dir}}/templates/couchdb.def.j2" dest="{{files_dir}}/files/couchdb.def"
+  - name: build Zookeeper image
+    local_action: shell "singularity" "build" "-F" "{{ files_dir }}/files/zookeeper.simg" "{{ files_dir }}/files/zookeeper.def"
+    become: true
+  - name: build Kafka image
+    local_action: shell "singularity" "build" "-F" "{{ files_dir }}/files/kafka.simg" "{{ files_dir }}/files/kafka.def"
+    become: true
+  - name: build CouchDB image
+    local_action: shell "singularity" "build" "-F" "{{ files_dir }}/files/couchdb.simg" "{{ files_dir }}/files/couchdb.def"
+    become: true

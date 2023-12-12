@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+{% for module in controller.slurmModules %}
+module add {{ module }}
+{% endfor %}
+
+
+cd $(dirname $0)/..
+mkdir -p data/zk-data data/zk-datalog logs/zookeeper
+exec singularity run \
+    --bind $PWD/data/zk-data:/data \
+    --bind $PWD/data/zk-datalog:/datalog \
+    --bind $PWD/logs/zookeeper:/logs \
+    --writable-tmpfs \
+    --env ZOO_MY_ID=1 \
+    --env ZOO_SERVERS="server.1=0.0.0.0:2888:3888" \
+    --env TZ="{{ docker.timezone }}" \
+    images/zookeeper.simg

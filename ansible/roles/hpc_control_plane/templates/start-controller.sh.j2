@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+{% for module in controller.slurmModules %}
+module add {{ module }}
+{% endfor %}
+
+cd $(dirname $0)/..
+
+# Load generated environment + override
+source conf/environment.sh
+export CONFIG_whisk_couchdb_host=127.0.0.1
+export KAFKA_HOSTS=$(hostname -i):{{ kafka.advertisedPort }}
+export CONTROLLER_OPTS="$CONTROLLER_OPTS -Dakka.remote.artery.bind.hostname=127.0.0.1 $(bin/transformEnvironment.sh)"
+
+echo "export KAFKA_HOSTS=$KAFKA_HOSTS" > conf/controller-override.sh
+echo "export CONFIG_whisk_couchdb_host=$(hostname -i)" >> conf/controller-override.sh
+echo "APIHOST=${CONFIG_whisk_controller_protocol}://$(hostname -i):${PORT}/" > $HOME/.wskprops
+echo "AUTH={{ lookup('file', 'files/auth.guest') }}" >> $HOME/.wskprops
+chmod 600 conf/jmxremote.password
+exec bin/controller 0

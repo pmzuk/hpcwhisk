@@ -8,5 +8,9 @@ module add {{ module }}
 cd $(dirname $0)
 source ../conf/environment.sh
 
+if [ -n "${CONTROLLER_SETUP}" ]; then
+  source ${CONTROLLER_SETUP}
+fi
+
 export INVOKER_OPTS="$INVOKER_OPTS $(./transformEnvironment.sh)"
 exec ./invoker --id $SLURM_ARRAY_TASK_ID --uniqueName $SLURM_ARRAY_TASK_ID

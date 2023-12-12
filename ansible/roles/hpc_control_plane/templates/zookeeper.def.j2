@@ -1,0 +1,6 @@
+Bootstrap: docker
+From: zookeeper:{{ zookeeper.version }}
+
+%post
+  chmod -R a+rwX /conf /data /datalog /logs
+

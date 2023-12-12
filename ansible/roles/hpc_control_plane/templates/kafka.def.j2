@@ -1,0 +1,6 @@
+Bootstrap: docker-daemon
+From: wurstmeister/kafka:{{ kafka.version }}
+
+%post
+  mkdir -p /kafka
+  chmod -R a+rwX /kafka /opt/

@@ -84,6 +84,7 @@ __controller_blackbox_fraction: 0.10
 
 # port means outer port
 controller:
+  archive: "{{ openwhisk_home }}/core/controller/build/distributions/controller.tar"
   dir:
     become: "{{ controller_dir_become | default(false) }}"
   confdir: "{{ config_root_dir }}/controller"
@@ -122,6 +123,7 @@ controller:
       password: "openwhisk"
       name: "{{ __controller_ssl_keyPrefix }}openwhisk-keystore.p12"
   extraEnv: "{{ controller_extraEnv | default({}) }}"
+  slurmModules: "{{ controller_slurm_modules | default(slurm_modules) |default([]) }}"
 
 jmx:
   basePortController: 15000
@@ -130,7 +132,7 @@ jmx:
   rmiBasePortInvoker: 18000
   user: "{{ jmxuser | default('jmxuser') }}"
   pass: "{{ jmxuser | default('jmxpass') }}"
-  jvmCommonArgs: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.password.file=/home/owuser/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/owuser/jmxremote.access"
+  jvmCommonArgs: "{{ jmx_jvm_common_args | default('-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.password.file=/home/owuser/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/owuser/jmxremote.access') }}"
   enabled: "{{ jmxremote_enabled | default('true') }}"
 
 transactions:
@@ -227,7 +229,7 @@ invoker:
   serverSpi: "{{ invokerServer_spi | default('') }}"
   singularity:
     imagePath: "{{ invoker_singularity_image_path | default('images/') }}"
-  slurmModules: "{{ invoker_slurm_modules | default([]) }}"
+  slurmModules: "{{ invoker_slurm_modules | default(slurm_modules) |default([]) }}"
 
 userLogs:
   spi: "{{ userLogs_spi | default('org.apache.openwhisk.core.containerpool.logging.DockerToActivationLogStoreProvider') }}"

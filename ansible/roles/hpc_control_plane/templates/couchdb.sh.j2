@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+{% for module in controller.slurmModules %}
+module add {{ module }}
+{% endfor %}
+
+
+cd $(dirname $0)/..
+mkdir -p data/couchdb
+singularity run \
+    --bind $PWD/data/couchdb:/opt/couchdb/data:rw \
+    --writable-tmpfs \
+    --env COUCHDB_USER="{{ db.credentials.admin.user }}" \
+    --env COUCHDB_PASSWORD="{{ db.credentials.admin.pass }}" \
+    --env TZ="{{ docker.timezone }}" \
+    images/couchdb.simg

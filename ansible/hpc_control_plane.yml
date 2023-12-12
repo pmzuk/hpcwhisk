@@ -1,0 +1,4 @@
+---
+- hosts: hpc_control_plane
+  roles:
+    - hpc_control_plane

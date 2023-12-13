@@ -1,0 +1,69 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+db_provider: CouchDB
+db_username: whisk_admin
+db_password: some_passw0rd
+db_protocol: http
+# Note: db_hostname is overriden in SLURM Job
+db_host: localhost
+db_port: 5984
+db_controller_user: whisk_local_controller0
+db_controller_pass: some_controller_passw0rd
+db_invoker_user: whisk_local_invoker0
+db_invoker_pass: some_invoker_passw0rd
+
+
+jmx_jvm_common_args: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.password.file=conf/jmxremote.password -Dcom.sun.management.jmxremote.access.file=conf/jmxremote.access"
+
+openwhisk_tmp_dir: "{{ lookup('env', 'OPENWHISK_TMP_DIR')|default('/tmp' if ansible_distribution == 'MacOSX' else '/var/tmp', true) }}"
+config_root_dir: "{{ openwhisk_tmp_dir }}/wskconf"
+whisk_images_dir: "/home/ubuntu/openwhisk-images"
+whisk_logs_dir: "{{ openwhisk_tmp_dir }}/wsklogs"
+coverage_enabled: "{{ lookup('env', 'GRADLE_COVERAGE') | default('false', true) | bool}}"
+coverage_logs_dir: "{{ openwhisk_tmp_dir }}/wskcov"
+docker_dns: ""
+docker_registry: ""
+runtimes_bypass_pull_for_local_images: true
+invoker_use_runc: "{{ ansible_distribution != 'MacOSX' }}"
+invoker_user_memory: 3072m
+invoker_singularity_image_path: "/home/XXXXX/native_invoker/images/"
+invoker_singularity_exec_lookup_paths: ["/path/to/singularity"]
+slurm_modules: ["singularity", "java/8u131"]
+
+db_prefix: whisk_local_
+
+invoker_allow_multiple_instances: true
+
+# Set kafka configuration
+kafka_heap: '512m'
+kafka_replicationFactor: 1
+kafka_topics_completed_retentionBytes: 104857600
+kafka_topics_completed_retentionMS: 300000
+kafka_topics_health_retentionBytes: 104857600
+kafka_topics_health_retentionMS: 300000
+kafka_topics_invoker_retentionBytes: 104857600
+kafka_topics_invoker_retentionMS: 300000
+
+env_hosts_dir: "{{ playbook_dir }}/environments/bsc"
+
+container_pool_akka_client: true
+runtimes_enable_concurrency: true
+limit_action_concurrency_max: 500
+limit_invocations_per_minute: 12000000
+limit_invocations_concurrent: 500000
+
+whisk_api_host_name: '' # will be set in runtime

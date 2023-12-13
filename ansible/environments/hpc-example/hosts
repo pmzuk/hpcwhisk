@@ -1,0 +1,30 @@
+; the first parameter in a host is the inventory_hostname
+
+; used for local actions only
+ansible ansible_connection=local
+
+[edge]
+
+[controllers]
+
+[kafkas]
+
+[zookeepers:children]
+
+[invokers]
+
+[native_invokers]
+invoker         ansible_user=XXXX ansible_host=XXXX deploy_dir=/home/XXX/native_invoker deploy_group=XXX ansible_remote_tmp=/tmp
+
+[hpc_control_plane]
+controlplane    ansible_user=XXXX ansible_host=XXX deploy_dir=/home/XXX/hpc_control_plane deploy_group=XXX ansible_remote_tmp=/tmp
+
+[db]
+
+[elasticsearch:children]
+
+[redis]
+
+[apigateway]
+
+[etcd]

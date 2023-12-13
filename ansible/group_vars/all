@@ -229,6 +229,7 @@ invoker:
   serverSpi: "{{ invokerServer_spi | default('') }}"
   singularity:
     imagePath: "{{ invoker_singularity_image_path | default('images/') }}"
+    execLookupPaths: "{{ invoker_singularity_exec_lookup_paths |default([\"/opt/singularity/bin/singularity\",\"/usr/local/bin/singularity\",\"/usr/bin/singularity\"]) }}"
   slurmModules: "{{ invoker_slurm_modules | default(slurm_modules) |default([]) }}"
 
 userLogs:

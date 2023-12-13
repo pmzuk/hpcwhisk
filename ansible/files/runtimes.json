@@ -2,11 +2,11 @@
     "runtimes": {
         "nodejs": [
             {
-                "kind": "nodejs:8",
+                "kind": "nodejs:18",
                 "default": true,
                 "image": {
                     "prefix": "",
-                    "name": "nodejs8action",
+                    "name": "nodejs18action",
                     "tag": ""
                 },
                 "deprecated": false,

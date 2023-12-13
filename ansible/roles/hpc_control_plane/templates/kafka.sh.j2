@@ -17,6 +17,7 @@ exec singularity run \
     --env KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR="{{ kafka.offsetsTopicReplicationFactor }}" \
     --env KAFKA_AUTO_CREATE_TOPICS_ENABLE=false \
     --env KAFKA_NUM_NETWORK_THREADS="{{ kafka.networkThreads }}" \
+    --env KAFKA_JVM_PERFORMANCE_OPTS="{{ kafka.jvmPerformanceOpts }}" \
     --env TZ="{{ docker.timezone }}" \
 {% if kafka.protocol != 'SSL' %}
     --env KAFKA_ADVERTISED_PORT={{ kafka.advertisedPort }} \

@@ -166,6 +166,7 @@ kafka:
   offsetsTopicReplicationFactor: "{{ kafka_offsetsTopicReplicationFactor | default(kafka_replicationFactor) | default((groups['kafkas']|length)|int) }}"
   # adapt this param for production deployments depending on the number of kafka consumers
   networkThreads: "{{ kafka_network_threads | default(3) }}"
+  jvmPerformanceOpts: "-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -XX:MaxInlineLevel=15 -Djava.awt.headless=true -XX:ParallelGCThreads=2"
 
 kafka_connect_string: "{% set ret = [] %}\
                        {% for host in groups['kafkas'] %}\

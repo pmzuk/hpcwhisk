@@ -21,6 +21,7 @@
       "KAFKA_DEFAULT_REPLICATION_FACTOR": "{{ kafka.replicationFactor }}"
       "KAFKA_BROKER_ID": "{{ groups['kafkas'].index(inventory_hostname) }}"
       "KAFKA_HEAP_OPTS": "-Xmx{{ kafka.heap }} -Xms{{ kafka.heap }}"
+      "KAFKA_JVM_PERFORMANCE_OPTS": "{{ kafka.jvmPerformanceOpts }}"
       "KAFKA_ZOOKEEPER_CONNECT": "{{ zookeeper_connect_string }}"
       "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR": "{{ kafka.offsetsTopicReplicationFactor }}"
       "KAFKA_AUTO_CREATE_TOPICS_ENABLE": "false"
